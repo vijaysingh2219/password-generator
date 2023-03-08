@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta tags for character set and viewport settings -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title of the HTML document -->
+    <title>Password Generator</title>
+
+    <!-- Link to the logo -->
+
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='logo.png') }}"
+      type="image/png"
+    />
+    <!-- Link to the external stylesheet (style.css) -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Main container for the password generator -->
+    <div class="container">
+      <!-- Heading for the password generator -->
+      <h1>Password Generator</h1>
+
+      <!-- Form for user input and password generation -->
+      <form action="/generate_password" method="post">
+        <!-- Label for the password length input -->
+        <label for="length">Password Length:</label>
+
+        <!-- Range input for selecting password length -->
+        <input
+          type="range"
+          id="length"
+          name="length"
+          min="4"
+          max="40"
+          value="{{ length }}"
+          aria-label="Choose password length"
+          aria-describedby="length-description"
+          oninput="updateLengthOutput(this.value)"
+        />
+
+        <!-- Output to display the selected password length -->
+        <output for="length" id="length-output">{{ length }}</output>
+
+        <!-- Description for the password length input -->
+        <p id="length-description" class="visually-hidden">
+          Choose a number between 4 and 40.
+        </p>
+
+        <!-- Checkbox options for including digits, letters, and symbols -->
+        <div
+          class="checkbox-group"
+          role="group"
+          aria-labelledby="checkbox-group-label"
+        >
+          <!-- Label for the checkbox group -->
+          <p id="checkbox-group-label" class="visually-hidden">
+            Include options:
+          </p>
+
+          <!-- Checkbox option for including digits -->
+          <div class="checkbox-option">
+            <input
+              type="checkbox"
+              id="include_digits"
+              name="include_digits"
+              {%
+              if
+              include_digits
+              %}checked{%
+              endif
+              %}
+            />
+            <label for="include_digits" class="checkbox-label"
+              >Include Digits</label
+            >
+          </div>
+
+          <!-- Checkbox option for including letters -->
+          <div class="checkbox-option">
+            <input
+              type="checkbox"
+              id="include_letters"
+              name="include_letters"
+              {%
+              if
+              include_letters
+              %}checked{%
+              endif
+              %}
+            />
+            <label for="include_letters" class="checkbox-label"
+              >Include Letters</label
+            >
+          </div>
+
+          <!-- Checkbox option for including symbols -->
+          <div class="checkbox-option">
+            <input
+              type="checkbox"
+              id="include_symbols"
+              name="include_symbols"
+              {%
+              if
+              include_symbols
+              %}checked{%
+              endif
+              %}
+            />
+            <label for="include_symbols" class="checkbox-label"
+              >Include Symbols</label
+            >
+          </div>
+        </div>
+
+        <!-- Button to trigger password generation -->
+        <button
+          type="submit"
+          aria-label="Generate Password"
+          onclick="updateLengthOutput(document.getElementById('length').value)"
+        >
+          Generate Password
+        </button>
+      </form>
+
+      <!-- Display the generated password if available -->
+      {% if password %}
+      <div class="password-result" role="alert" aria-live="assertive">
+        <p>Your generated password:</p>
+
+        <!-- Strong tag with class 'password' to style the generated password -->
+        <strong class="password">{{ password }}</strong>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- JavaScript script for updating the displayed password length -->
+    <script>
+      function updateLengthOutput(value) {
+        document.getElementById("length-output").textContent = value;
+      }
+    </script>
+  </body>
+</html>
